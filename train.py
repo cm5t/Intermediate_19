@@ -5,10 +5,10 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 import joblib
 
-# Load and preprocess the data
+# Load the data
 data = pd.read_csv("Cleaned_Family_Data.csv")
 
-# Currency conversion
+# currency conversion
 income_expense_columns = [
     'Total Household Income',
     'Total Income from Entrepreneurial Acitivites',
@@ -23,10 +23,10 @@ for col in income_expense_columns:
     data[col] = data[col] / 56.14
     data.rename(columns={col: col + " (USD)"}, inplace=True)
 
-# Nett income
+# net income
 data['Nett Income (USD)'] = data['Total Household Income (USD)'] - data['Total Expenditure (USD)']
 
-# Drop columns
+# drop columns
 toDrop = [
     'Total Food Expenditure (USD)', 'Transportation Expenditure (USD)', 'Housing and water Expenditure (USD)',
     'Medical Care Expenditure (USD)', 'Education Expenditure (USD)', 'Total Income from Entrepreneurial Acitivites (USD)',
