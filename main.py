@@ -7,7 +7,12 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder, LabelEncoder
 import streamlit as st
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+from sklearn import tree
 
+
+st.title("Dataset - Filipino Family Income and Expenditure")
 
 data = pd.read_csv("buildingblocs25/Cleaned_Family_Data.csv")
 income_expense_columns = [
@@ -88,3 +93,32 @@ data['Saving Urgency'] = data.apply(savingurgency, axis=1)
 data = data.replace([np.inf, -np.inf], 0)
 
 st.dataframe(data.head(1000))
+
+
+## ML!!
+
+scaler = StandardScaler()
+X = data.drop(columns=['Saving Urgency'])
+y = data['Saving Urgency']
+Scaled_X = scaler.fit_transform(X)
+
+X_train, X_test, y_train, y_test = train_test_split(Scaled_X, y, test_size=0.4, random_state=69)
+
+dectree = RandomForestClassifier(n_estimators=100, random_state=69)
+dectreefitted = dectree.fit(X_train, y_train)
+
+y_pred = dectreefitted.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+
+plt.figure(figsize=(10, 6))
+plt.bar(range(len(dectreefitted.feature_importances_)), dectreefitted.feature_importances_)
+plt.title('Feature Importances for Saving Urgency Prediction')
+st.pyplot(plt)
+
+plt.figure(figsize=(20,10))
+st.title("The decision tree!")
+st.header("Accuracy: " + str(accuracy_score(y_test, y_pred)))
+onetree = dectree.estimators_[0]
+tree.plot_tree(onetree, feature_names=X.columns.tolist())
+st.pyplot(plt)
