@@ -17,7 +17,7 @@
 ---
 
 # Viewing of the app:
-website: https://buildingblocs2025-i19.streamlit.app/Machine_Learning
+- Website: https://buildingblocs2025-i19.streamlit.app/Machine_Learning
 
 # Essential links for presentation
-- slides: https://www.canva.com/design/DAGqNho64RM/Z8415dsKw0SrDVs4L_Q2Nw/edit?utm_content=DAGqNho64RM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+- Slides: https://www.canva.com/design/DAGqNho64RM/Z8415dsKw0SrDVs4L_Q2Nw/edit?utm_content=DAGqNho64RM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
