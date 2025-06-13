@@ -1,6 +1,6 @@
 # 💸 Saving Urgency Predictor – Building Blocs 2025 (I19)
 # By Dylan, Chandi, Kanish and Adithya
-## This is a Streamlit-based web app that predicts how urgently a family needs to save based on income and expenditure data. It uses machine learning (Random Forest + Linear Regression) and provides actionable financial advice for Singaporean households.
+## This is a Streamlit-based web app that predicts how urgently a family needs to save based on income and expenditure data. It uses machine learning (Random Forest) and provides actionable financial advice for Singaporean households.
 
 ---
 
