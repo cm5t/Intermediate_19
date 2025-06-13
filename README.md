@@ -43,6 +43,6 @@ Make sure Cleaned_Family_Data.csv is in the same folder as main.py, and that the
 ## To run the project, type 'streamlit run main.py'.
 
 You can navigate to the other pages via the sidebar:
-main.py: Overview and intro
-1-machinelearning.py: Data, training, and decision tree visualisation
-2-douneed2save.py: Input form and saving advice
+- main.py: Overview and intro
+- 1-machinelearning.py: Data, training, and decision tree visualisation
+- 2-douneed2save.py: Input form and saving advice
