@@ -40,13 +40,13 @@ toDrop = [
     'Total Income from Entrepreneurial Acitivites (USD)',
     'Tenure Status',
     'Type of Building/House',
-    'Household Head Age',
     'Household Head Marital Status',
     'Household Head Highest Grade Completed',
-    'Household Head Job or Business Indicator',
     'Main Source of Income'
 ]
 
 data.drop(columns=toDrop, inplace=True)
+data['Household Head Job or Business Indicator'] = data['Household Head Job or Business Indicator'].map({'With Job/Business': 1, "No Job/Business": 0})
+
 
 st.dataframe(data.head(100))
