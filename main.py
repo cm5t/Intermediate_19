@@ -48,7 +48,7 @@ toDrop = [
 np.random.seed(69)
 
 # to ensure that there are no insane values/outliers in the data
-data = data[data['Nett Income (USD)'] > 0]
+data = data[data['Total Household Income (USD)'] > 0]
 data = data[data['Household Head Age'] >= 22]
 
 data.drop(columns=toDrop, inplace=True)
@@ -56,17 +56,35 @@ data.drop(columns=toDrop, inplace=True)
 # adding more metrics
 data['Household Head Job or Business Indicator'] = data['Household Head Job or Business Indicator'].map({'With Job/Business': 1, "No Job/Business": 0})
 data['Nett income per person in household'] = data['Nett Income (USD)'] / data['Total Number of Family members']
-data['Years left till retirement'] = (65 - data['Household Head Age']).clip()
+data['Years left till retirement'] = (65 - data['Household Head Age']).clip(lower=0)
 
-# assume that you are saving 75% of nett income
-data['Saving amount'] = data['Nett Income (USD)'] * 0.75
+# assume that you are saving 65% of nett income
+data['Saving amount'] = data['Nett Income (USD)'] * 0.65
 
 # assume inflation > salary growth not by much
 data['Expected future Expenditure'] = data['Total Expenditure (USD)'] * ((1 + np.random.uniform(0.045, 0.05, size=len(data))) ** data['Years left till retirement'])
 data['Expected income'] = data['Total Household Income (USD)'] * ((1 + np.random.uniform(0.04, 0.045, size=len(data))) ** data['Years left till retirement'])
+data['Expected nett income'] = data['Expected income'] - data['Expected future Expenditure']
+data['Expected saving amount'] = data['Expected nett income'] * 0.65
+
+def savingurgency(row):
+    if row['Nett Income (USD)'] > row['Expected future Expenditure']:
+        return 0
+    elif row['Total Household Income (USD)'] > row['Expected future Expenditure']:
+        return 1
+    elif (row['Expected income'] * 0.75) > row['Expected future Expenditure']:
+        return 2
+    elif row['Expected income'] > row['Expected future Expenditure']:
+        return 3
+    elif row['Total Household Income (USD)'] > row['Total Expenditure (USD)']:
+        return 4
+    else:
+        return 5
+
+data['Saving Urgency'] = data.apply(savingurgency, axis=1)
 
 
 # avoid nans
 data = data.replace([np.inf, -np.inf], 0)
 
-st.dataframe(data.head(100))
+st.dataframe(data.head(1000))
