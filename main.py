@@ -11,13 +11,13 @@ st.title("💰 Should I Save or Not?")
 st.write("Enter your household information below to check saving urgency and advice.")
 
 # inputs
-income = st.number_input("Total Household Income (PHP)", min_value=0.0, value=100000.0)
-entrepreneur_income = st.number_input("Income from Entrepreneurial Activities (PHP)", min_value=0.0)
-food = st.number_input("Food Expenditure (PHP)", min_value=0.0)
-transport = st.number_input("Transportation Expenditure (PHP)", min_value=0.0)
-housing = st.number_input("Housing and Water Expenditure (PHP)", min_value=0.0)
-medical = st.number_input("Medical Care Expenditure (PHP)", min_value=0.0)
-education = st.number_input("Education Expenditure (PHP)", min_value=0.0)
+income_usd = st.number_input("Total Household Income per month (USD)", min_value=0.0, value=4000.0)
+entrepreneur_income_usd = st.number_input("Income from Entrepreneurial Activities (USD)", min_value=0.0)
+food_usd = st.number_input("Food Expenditure (USD)", min_value=0.0)
+transport_usd = st.number_input("Transportation Expenditure (USD)", min_value=0.0)
+housing_usd = st.number_input("Housing and Water Expenditure (USD)", min_value=0.0)
+medical_usd = st.number_input("Medical Care Expenditure (USD)", min_value=0.0)
+education_usd = st.number_input("Education Expenditure (USD)", min_value=0.0)
 
 family_members = st.number_input("Total Number of Family Members", min_value=1, value=4)
 members_0_4 = st.number_input("Members with age less than 5 years old", min_value=0, max_value=20, value=0)
@@ -27,25 +27,14 @@ employed_members = st.number_input("Total number of family members employed", mi
 head_age = st.number_input("Household Head Age", min_value=18, value=40)
 job_indicator = st.selectbox("Does the Household Head have a Job/Business?", ["With Job/Business", "No Job/Business"])
 
-# when button pressed
+# when predict button clicked
 if st.button("Predict Saving Urgency"):
-
-    # Convert filipino money to USD
-    def to_usd(php): return php / 56.14
-
-    income_usd = to_usd(income)
-    entrepreneur_income_usd = to_usd(entrepreneur_income)
-    food_usd = to_usd(food)
-    transport_usd = to_usd(transport)
-    housing_usd = to_usd(housing)
-    medical_usd = to_usd(medical)
-    education_usd = to_usd(education)
 
     total_expenditure_usd = food_usd + transport_usd + housing_usd + medical_usd + education_usd
     nett_income = income_usd - total_expenditure_usd
     years_left = max(0, 65 - head_age)
     job_value = 1 if job_indicator == "With Job/Business" else 0
-
+    
     nett_income_per_person = nett_income / family_members
     saving_amount = nett_income * 0.65
     future_exp = total_expenditure_usd * ((1 + 0.0475) ** years_left)
@@ -53,7 +42,7 @@ if st.button("Predict Saving Urgency"):
     expected_nett = expected_income - future_exp
     expected_saving = expected_nett * 0.65
 
-    # data input
+    # input dataframe
     input_data = pd.DataFrame([{
         'Total Household Income (USD)': income_usd,
         'Total Income from Entrepreneurial Acitivites': entrepreneur_income_usd,
@@ -99,7 +88,7 @@ if st.button("Predict Saving Urgency"):
     X_scaled = scaler.transform(input_data)
     prediction = model.predict(X_scaled)[0]
 
-    # output
+    # urgency
     st.subheader("🔍 Saving Urgency Level:")
     levels = {
         0: "✅ No urgency – You're doing great!",
@@ -111,24 +100,25 @@ if st.button("Predict Saving Urgency"):
     }
     st.write(f"**Level {prediction}:** {levels.get(prediction)}")
 
-    # subsidies and bursaries etc.
-    st.subheader("💡 Financial Advice (Singapore-based)")
+    # subsidies and bursaris
+    st.subheader("Financial Advice")
 
-    income_php = income_usd * 56.14
-    if income_php < 30000:
-        st.markdown("- **ComCare Assistance** – For low-income families.")
-        st.markdown("- **MOE FAS** – School subsidies for kids.")
+    if income_usd < 890 and head_age >= 60:
         st.markdown("- **CHAS Blue** – Medical subsidies.")
-    elif income_php < 60000:
+    if income_usd < 1400:
+        st.markdown("- **ComCare Assistance** – For low-income families.")
+    if income_usd < 1480 and head_age >= 60:
         st.markdown("- **CHAS Orange** – Healthcare help.")
+    if income_usd < 2000:
         st.markdown("- **GST Vouchers, U-Save** – Utilities and cash rebates.")
-    else:
+    if income_usd < 2220:
+        st.markdown("- **MOE FAS** – School subsidies for kids.")
+    if income_usd > 3000 and head_age < 60:
         st.markdown("- You're not eligible for income-based schemes, but explore CPF reliefs and retirement supplements.")
-
-    if head_age >= 55:
-        st.markdown("- **Silver Support Scheme** – Quarterly payouts for elderly.")
+    if head_age >= 65 and income_usd < 1330:
+        st.markdown("- 👴 **Silver Support Scheme** – Quarterly payouts for elderly.")
     elif head_age <= 25:
-        st.markdown("- **MOE Bursaries, CDC Awards** – For students in low/mid-income households.")
+        st.markdown("- 🎓 **MOE Bursaries, CDC Awards** – For students in low/mid-income households.")
 
     st.markdown("---")
     st.caption("Subsidy advice is based on Singapore government policies as of 2025.")
