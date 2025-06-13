@@ -1,7 +1,5 @@
---upgrade pip
 pandas
 numpy
-matplotlib.pyplot
 sklearn
 joblib
 streamlit
