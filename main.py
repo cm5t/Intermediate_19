@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder, L
 import streamlit as st
 
 
-data = pd.read_csv("Cleaned_Family_Data.csv")
+data = pd.read_csv("buildingblocs25/Cleaned_Family_Data.csv")
 income_expense_columns = [
     'Total Household Income',
     'Total Income from Entrepreneurial Acitivites',
@@ -45,8 +45,28 @@ toDrop = [
     'Main Source of Income'
 ]
 
-data.drop(columns=toDrop, inplace=True)
-data['Household Head Job or Business Indicator'] = data['Household Head Job or Business Indicator'].map({'With Job/Business': 1, "No Job/Business": 0})
+np.random.seed(69)
 
+# to ensure that there are no insane values/outliers in the data
+data = data[data['Nett Income (USD)'] > 0]
+data = data[data['Household Head Age'] >= 22]
+
+data.drop(columns=toDrop, inplace=True)
+
+# adding more metrics
+data['Household Head Job or Business Indicator'] = data['Household Head Job or Business Indicator'].map({'With Job/Business': 1, "No Job/Business": 0})
+data['Nett income per person in household'] = data['Nett Income (USD)'] / data['Total Number of Family members']
+data['Years left till retirement'] = (65 - data['Household Head Age']).clip()
+
+# assume that you are saving 75% of nett income
+data['Saving amount'] = data['Nett Income (USD)'] * 0.75
+
+# assume inflation > salary growth not by much
+data['Expected future Expenditure'] = data['Total Expenditure (USD)'] * ((1 + np.random.uniform(0.045, 0.05, size=len(data))) ** data['Years left till retirement'])
+data['Expected income'] = data['Total Household Income (USD)'] * ((1 + np.random.uniform(0.04, 0.045, size=len(data))) ** data['Years left till retirement'])
+
+
+# avoid nans
+data = data.replace([np.inf, -np.inf], 0)
 
 st.dataframe(data.head(100))
