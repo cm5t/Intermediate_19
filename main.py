@@ -10,4 +10,43 @@ import streamlit as st
 
 
 data = pd.read_csv("buildingblocs25/Cleaned_Family_Data.csv")
-st.dataframe(data.head(5))
+income_expense_columns = [
+    'Total Household Income',
+    'Total Income from Entrepreneurial Acitivites',
+    'Total Food Expenditure',
+    'Transportation Expenditure',
+    'Housing and water Expenditure',
+    'Medical Care Expenditure',
+    'Education Expenditure'
+]
+
+data['Total Expenditure (USD)'] = data[['Total Food Expenditure', 'Transportation Expenditure', 'Housing and water Expenditure', 'Medical Care Expenditure', 'Education Expenditure']].div(56.14).sum(axis=1)
+
+
+for col in income_expense_columns:
+    data[col] = data[col] / 56.14
+
+for col in income_expense_columns:
+    data.rename(columns={col: col + " (USD)"}, inplace=True)
+
+data['Nett Income (USD)'] = data['Total Household Income (USD)'] - data['Total Expenditure (USD)']
+
+toDrop = [
+    'Total Food Expenditure (USD)',
+    'Transportation Expenditure (USD)',
+    'Housing and water Expenditure (USD)',
+    'Medical Care Expenditure (USD)',
+    'Education Expenditure (USD)',
+    'Total Income from Entrepreneurial Acitivites (USD)',
+    'Tenure Status',
+    'Type of Building/House',
+    'Household Head Age',
+    'Household Head Marital Status',
+    'Household Head Highest Grade Completed',
+    'Household Head Job or Business Indicator',
+    'Main Source of Income'
+]
+
+data.drop(columns=toDrop, inplace=True)
+
+st.dataframe(data.head(100))
