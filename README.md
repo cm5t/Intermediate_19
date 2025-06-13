@@ -24,9 +24,9 @@
 ```bash
 git clone https://github.com/cm5t/buildingblocs25.git
 cd buildingblocs25
-Make sure Cleaned_Family_Data.csv is in the same folder as main.py, and that there is a folder called 'pages'.
-
 ```
+
+Make sure Cleaned_Family_Data.csv is in the same folder as main.py, and that there is a folder called 'pages'.
 
 # Project Structure:
 ```bash
@@ -41,13 +41,8 @@ Make sure Cleaned_Family_Data.csv is in the same folder as main.py, and that the
 ```
 
 ## To run the project, type 'streamlit run main.py'.
-```bash
----
 
 You can navigate to the other pages via the sidebar:
 main.py: Overview and intro
 1-machinelearning.py: Data, training, and decision tree visualisation
 2-douneed2save.py: Input form and saving advice
-
----
-```
