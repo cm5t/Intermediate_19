@@ -46,3 +46,7 @@ You can navigate to the other pages via the sidebar:
 - main.py: Overview and intro
 - 1-machinelearning.py: Data, training, and decision tree visualisation
 - 2-douneed2save.py: Input form and saving advice
+
+
+Essential links for presentation
+- slides: https://www.canva.com/design/DAGqNho64RM/Z8415dsKw0SrDVs4L_Q2Nw/edit?utm_content=DAGqNho64RM&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
