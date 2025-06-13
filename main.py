@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler, OneHotEncoder, L
 import streamlit as st
 
 
-data = pd.read_csv("buildingblocs25/Cleaned_Family_Data.csv")
+data = pd.read_csv("Cleaned_Family_Data.csv")
 income_expense_columns = [
     'Total Household Income',
     'Total Income from Entrepreneurial Acitivites',
